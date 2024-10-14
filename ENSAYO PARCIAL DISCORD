@@ -1,0 +1,309 @@
+MAIN
+
+public class Main {
+    public static void main(String[] args) {
+        Gestion listadoEmpleado = new Gestion();
+
+        Empleado admin1 = new Administrativo(111,"Luna","Mena", "Alvear 2328", "29-07,04",Area.FINANZAS);
+        Empleado vendedor1 = new Vendedor(222,"Alejo","pereyra","guemes 123", "03-45-32",100);
+
+        listadoEmpleado.agregar(admin1);
+        listadoEmpleado.agregar(vendedor1);
+        System.out.println(listadoEmpleado.contarEmpleados());
+        System.out.println(listadoEmpleado.toString());
+        System.out.println(listadoEmpleado.totalApagarSueldo());
+        System.out.println(listadoEmpleado.buscarPorLegajo(111));
+        System.out.println(listadoEmpleado.eliminarPorLegajo(222));
+        System.out.println(listadoEmpleado.toString());
+
+
+    }
+}
+
+CLASE EMPLEADO
+
+import java.util.Objects;
+
+public abstract class Empleado implements iCobro {
+    private int legajo;
+    private String nombre;
+    private String apellido;
+    private String direccion;
+    private String fechaNacimiento;
+
+    public int getLegajo() {
+        return legajo;
+    }
+
+    public void setLegajo(int legajo) {
+        this.legajo = legajo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Empleado(int legajo, String nombre, String apellido, String direccion, String fechaNacimiento) {
+        this.legajo = legajo;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+    public Empleado() {
+        this.legajo = 0;
+        this.nombre = "nodefinido";
+        this.apellido = "nodefinido";
+        this.direccion = "nodefinido";
+        this.fechaNacimiento = "nodefinido";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Empleado empleado = (Empleado) o;
+        return legajo == empleado.legajo;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(legajo);
+    }
+
+    @Override
+    public int cobrar() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Empleado{" +
+                "legajo=" + legajo +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", fechaNacimiento='" + fechaNacimiento + '\'' +
+                '}';
+    }
+}
+
+CLASE ADMINISTRATIVO
+
+public class Administrativo extends Empleado implements iCobro {
+    private Area areaDeTrabajo;
+    private int sueldo;
+
+    public int getSueldo() {
+        return sueldo;
+    }
+
+    public void setSueldo(int sueldo) {
+        this.sueldo = sueldo;
+    }
+
+    public Area getAreaDeTrabajo() {
+        return areaDeTrabajo;
+    }
+
+    public void setAreaDeTrabajo(Area areaDeTrabajo) {
+        this.areaDeTrabajo = areaDeTrabajo;
+    }
+
+    public Administrativo(int legajo, String nombre, String apellido, String direccion, String fechaNacimiento, Area areaDeTrabajo) {
+        super(legajo, nombre, apellido, direccion, fechaNacimiento);
+        this.areaDeTrabajo = areaDeTrabajo;
+        this.sueldo = 15;
+    }
+
+    public Administrativo(Area areaDeTrabajo) {
+        this.areaDeTrabajo = Area.FINANZAS;
+        this.sueldo = 15;
+    }
+
+    @Override
+    public int cobrar() {
+        return getSueldo();
+    }
+
+    @Override
+    public String toString() {
+        return "Administrativo{" +
+                "areaDeTrabajo=" + areaDeTrabajo +
+                ", sueldo=" + sueldo +
+                '}';
+    }
+}
+
+CLASE VENDEDOR
+public class Vendedor extends Empleado implements iCobro {
+    private int montoVentaMensual;
+
+    public int getMontoVentaMensual() {
+        return montoVentaMensual;
+    }
+
+    public void setMontoVentaMensual(int montoVentaMensual) {
+        this.montoVentaMensual = montoVentaMensual;
+    }
+
+    public Vendedor(int legajo, String nombre, String apellido, String direccion, String fechaNacimiento, int montoVentaMensual) {
+        super(legajo, nombre, apellido, direccion, fechaNacimiento);
+        this.montoVentaMensual = montoVentaMensual;
+    }
+
+    public Vendedor(int montoVentaMensual) {
+        this.montoVentaMensual = 0;
+    }
+
+    @Override
+    public int cobrar() {
+        int sueldo = 0;
+        sueldo = (int) (montoVentaMensual * 0.3);
+        return sueldo;
+    }
+
+    @Override
+    public String toString() {
+        return "Vendedor{" +
+                "montoVentaMensual=" + montoVentaMensual +
+                '}';
+    }
+}
+
+CLASE REPARTIDOR
+
+public class Repartidor implements iCobro {
+    private int kmRecorrido;
+
+    public int getKmRecorrido() {
+        return kmRecorrido;
+    }
+
+    public void setKmRecorrido(int kmRecorrido) {
+        this.kmRecorrido = kmRecorrido;
+    }
+
+    public Repartidor(int kmRecorrido) {
+        this.kmRecorrido = kmRecorrido;
+    }
+    public Repartidor() {
+        this.kmRecorrido = 0;
+    }
+
+    @Override
+    public int cobrar() {
+        int sueldo = 0;
+        sueldo =(int) kmRecorrido * 3;
+        return sueldo ;
+    }
+
+    @Override
+    public String toString() {
+        return "Repartidor{" +
+                "kmRecorrido=" + kmRecorrido +
+                '}';
+    }
+}
+
+ENUM AREA
+public enum Area {
+    FINANZAS,
+    VENTAS,
+    MARKETING,
+    LOGISTICA;
+}
+
+INTERFAZ COBRO
+
+public interface iCobro {
+    public int cobrar();
+}
+
+CLASE GESTORA
+
+import java.util.ArrayList;
+
+public class Gestion {
+    ArrayList <Empleado> listado;
+
+    public Gestion() {
+        this.listado = new ArrayList<>();
+    }
+
+    public void agregar (Empleado a){
+        listado.add(a);
+    }
+    public String contarEmpleados (){
+        return "LA CANTIDAD DE EMPLEADOS INGRESADOS SON: " + listado.size();
+    }
+
+    public String buscarPorLegajo (int legajoAbuscar){
+        boolean encontrado = false;
+        for (Empleado aux : listado) {
+            if (aux.getLegajo() == legajoAbuscar){
+                encontrado = true;
+            }
+        }
+        return "SI EL EMPLEADO FUE ENCONTRADO SE MOSTRARA TRUE, EN CASO CONTRARIO FLASE ----> " + encontrado;
+    }
+
+    public String eliminarPorLegajo(int legajoAborrar){
+        boolean borrado = false;
+        int i = 0;
+        for (Empleado aux : listado) {
+            if (aux.getLegajo() == legajoAborrar){
+               // listado.remove(aux);
+                break;
+            }
+            i++;
+            borrado = listado.remove(listado.get(i));
+
+        }
+        return "SI EL EMPLEADO FUE BORRADO SE MOSTRARA TRUE, EN CASO CONTRARIO FLASE ----> " + borrado;
+    }
+
+    public String totalApagarSueldo (){
+        int total = 0;
+        for (int i = 0; i < listado.size(); i++) {
+            total += listado.get(i).cobrar();
+
+        }
+        return "EL TOTAL A PAGAR ES DE: " + total;
+    }
+
+    @Override
+    public String toString() {
+        return "Gestion{" +
+                "listado=" + listado +
+                '}';
+    }
+}
